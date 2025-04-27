@@ -1,5 +1,6 @@
 import sys
 sys.path.append('./data')
+sys.path.append('./data/splitData/test')
 sys.path.append('./model')
 
 import os
@@ -16,7 +17,7 @@ from model import MobileNetV3_large
 from model import MobileNetV3_small
 import torchvision
 from torch.autograd import Variable
-import cv2
+#import cv2
 from PIL import Image
 
 # 创建一个检测器类，包含了图片的读取，检测等方法
@@ -57,8 +58,19 @@ class Detector(object):
         print("预测的结果为：",result)
 
 if __name__=='__main__':
-    detector=Detector('large',num_classes=17)
-    detector.detect('./weights/best.pkl','./1.jpg')
+    detector=Detector('large',num_classes=7)
+    for i in range(0,7):
+        print("check ",i)
+        # 遍历文件夹 ./data/splitData/test/{i} 下的所有图片
+        folder_path = f'./data/splitData/test/{i}'
+        if not os.path.isdir(folder_path):
+            print(f"目录 {folder_path} 不存在，跳过。")
+            continue
+        for filename in os.listdir(folder_path):
+            if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif')):
+                img_path = os.path.join(folder_path, filename)
+                print(f"检测类别 {i} 下的图片: {img_path}")
+                detector.detect('./weights/best.pkl', img_path)
 
 
 

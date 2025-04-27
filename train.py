@@ -21,7 +21,7 @@ from torch.autograd import Variable
 MAX_EPOCH=50
 BATCH_SIZE=64
 LR=0.0001
-log_interval=3
+log_interval=1
 val_interval=1
 
 # ============================ step 1/5 数据 ============================
@@ -52,7 +52,7 @@ train_loader=DataLoader(dataset=train_data,batch_size=BATCH_SIZE,shuffle=True)
 valid_loader=DataLoader(dataset=valid_data,batch_size=BATCH_SIZE)
 
 # ============================ step 2/5 模型 ============================
-net=MobileNetV3_large(num_classes=17)
+net=MobileNetV3_large(num_classes=7)
 if torch.cuda.is_available():
     net.cuda()
 # ============================ step 3/5 损失函数 ============================
