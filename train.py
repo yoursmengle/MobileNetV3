@@ -18,7 +18,7 @@ import torchvision
 from torch.autograd import Variable
 
 #宏定义一些数据，如epoch数，batchsize等
-MAX_EPOCH=50
+MAX_EPOCH=25
 BATCH_SIZE=64
 LR=0.0001
 log_interval=1
@@ -52,7 +52,7 @@ train_loader=DataLoader(dataset=train_data,batch_size=BATCH_SIZE,shuffle=True)
 valid_loader=DataLoader(dataset=valid_data,batch_size=BATCH_SIZE)
 
 # ============================ step 2/5 模型 ============================
-net=MobileNetV3_large(num_classes=7)
+net=MobileNetV3_large(num_classes=3)
 if torch.cuda.is_available():
     net.cuda()
 # ============================ step 3/5 损失函数 ============================
@@ -91,18 +91,20 @@ for epoch in range(MAX_EPOCH):
             print('epoch:{},loss:{:.4f}'.format(epoch+1,loss.data.item()))
         _, predicted = torch.max(out.data, 1)
         total += label.size(0)
-        # print("============================================")
-        # print("源数据标签：",label)
-        # print("============================================")
-        # print("预测结果：",predicted)
-        # print("相等的结果为：",predicted == label)
+        print("============================================")
+        print("源数据标签：",label)
+        print("============================================")
+        print("预测结果：",predicted)
+        print("相等的结果为：",predicted == label)
         correct += (predicted == label).sum()
+
     print("============================================")
-    accurancy=correct / total
-    if accurancy>accurancy_global:
+    accurancy = correct / total
+    if accurancy>=accurancy_global:
         torch.save(net.state_dict(), './weights/best.pkl')
         print("准确率由：", accurancy_global, "上升至：", accurancy, "已更新并保存权值为weights/best.pkl")
         accurancy_global=accurancy
     print('第%d个epoch的识别准确率为：%d%%' % (epoch + 1, 100*accurancy))
+
 torch.save(net.state_dict(), './weights/last.pkl')
 print("训练完毕，权重已保存为：weights/last.pkl")

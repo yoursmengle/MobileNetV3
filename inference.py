@@ -58,8 +58,8 @@ class Detector(object):
         print("预测的结果为：",result)
 
 if __name__=='__main__':
-    detector=Detector('large',num_classes=7)
-    for i in range(0,7):
+    detector=Detector('large',num_classes=3)
+    for i in range(0,3):
         print("check ",i)
         # 遍历文件夹 ./data/splitData/test/{i} 下的所有图片
         folder_path = f'./data/splitData/test/{i}'
